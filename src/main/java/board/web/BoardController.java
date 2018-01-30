@@ -40,14 +40,14 @@ import utility.Paging;
 public class BoardController {
 		
 	/** BoardService */
-	@Resource(name = "notiService")
+	@Resource(name = "boardService")
 	private BoardService boardService;
 	
 	@Autowired
 	@Qualifier("myBoardDao")
 	private BoardDao baordDao;
 	
-	@RequestMapping(value="/board/boardlist.do")
+	@RequestMapping(value="/boardlist.do")
 	public String boardList(@RequestParam(value = "whatColumn", required = false ) String whatColumn,
 			@RequestParam(value = "keyword", required = false ) String keyword,
 			@RequestParam(value = "pageNumber", required = false ) String pageNumber,
@@ -61,7 +61,7 @@ public class BoardController {
 		
 		int totalCount = baordDao.GetTotalCount( map );
 		
-		String url = req.getContextPath() + "/board/boardlist.do";
+		String url = req.getContextPath() + "/boardlist.do";
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -73,11 +73,9 @@ public class BoardController {
 		System.out.println("boardLists.size(): " + boardLists.size());
 		mav.addObject( "boardLists", boardLists );		
 		mav.addObject( "pageInfo", pageInfo );
-		mav.setViewName("BoardList");
+		mav.setViewName("BoardList");		
 		
 		return boardService.boardList(req,mav);
 	} 
-	
-	
-	
+		
 }

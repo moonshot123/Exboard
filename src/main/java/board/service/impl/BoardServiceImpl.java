@@ -22,7 +22,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public String boardList(HttpServletRequest req, ModelAndView mav)throws Exception{
 		
-		return  "1";
+		return  "success";
 	}
 	
 }
