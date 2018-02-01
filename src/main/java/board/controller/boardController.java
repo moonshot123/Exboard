@@ -10,13 +10,33 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import board.model.board;
 import board.model.boardDao;
 import utility.Paging;
+
+/**
+ * 게시판 페이지 컨트롤러 클래스
+ * @author JJW
+ * @since 2018.02.01
+ * @version 1.0
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *
+ *   수정일      수정자           수정내용
+ *  -------    --------    ---------------------------
+ *  2018.02.01 JJW		 	 최초생성
+ *   
+ *
+ * </pre>
+ */
 
 @Controller
 public class boardController {
@@ -30,7 +50,10 @@ public class boardController {
 	SqlSessionTemplate sqlSessionTemplate;
 	
 	
-	
+	/**
+		글 리스트
+	*/
+		
 	@RequestMapping(value="/list.bo")
 	public ModelAndView boardlist(
 			@RequestParam(value = "whatColumn", required = false ) String whatColumn,
@@ -68,6 +91,10 @@ public class boardController {
 	} 
 	
 
+	/**
+		글쓰기
+	*/
+	
 	
 	@RequestMapping(value="/writeBoard.bo")
 	public ModelAndView writeBoard(HttpServletRequest req, board board){
@@ -99,6 +126,51 @@ public class boardController {
 		}
 		return mav;		
 	}
+	
+	
+	
+	/**
+		업데이트
+	 */
+	
+	@RequestMapping(value="/updateboard.bo" , method=RequestMethod.GET)
+	public String updateboard(
+			@RequestParam(value="num",required=true) int num,Model model){
+		
+		board board = boardDao.GetData(num);
+		model.addAttribute("board",board);
+		return "BoardUpdate";
+	}
+	
+
+	@RequestMapping(value="/updateboard.bo" , method=RequestMethod.POST)
+	public String doActionPost(board board){
+		
+		boardDao.UpdateData(board);
+		
+		return "redirect:/list.bo";
+	}		
+	
+	
+	/**
+		상세글
+	*/	
+	@Autowired
+	@Qualifier("myBoardDao")
+	private boardDao baordDao;
+	
+	@RequestMapping(value="/detail.bo")
+	public String detailboard(@RequestParam(value="num",required=true) int num,Model model){
+		
+		board board = baordDao.GetData(num);
+		
+		model.addAttribute("board",board);
+		
+		return "BoardDetail";
+	}
+	
+	
+	
 	
 	
 	
